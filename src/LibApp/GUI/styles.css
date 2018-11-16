@@ -1,0 +1,68 @@
+.root   {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #444444;
+}
+
+/*
+######## BUTTONS ########
+*/
+
+.button {
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-background-color: #f1f1f1;
+    -fx-border-color: #e1e1e1;
+    -fx-text-fill: #444444;
+}
+
+.button:hover   {
+    -fx-border-color: #2091d2;
+}
+
+.button:pressed {
+    -fx-background-color: #2091d2;
+    -fx-border-color: #2091d2;
+    -fx-text-fill: #ffffff;
+}
+
+/*######## TABS ########*/
+
+.tab   {
+    -fx-background-color: #f1f1f1;
+    -fx-border-color: #e1e1e1;
+    -fx-text-fill: #444444;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+}
+
+.tab:hover {
+    -fx-border-color: #2091d2;
+}
+
+.tab:selected  {
+    -fx-background-color: #2091d2;
+    -fx-border-color: #2091d2;
+}
+
+.tab:selected .tab-label{
+    -fx-text-fill: #ffffff;
+}
+
+/*######## OTHER ########*/
+
+.tab-pane .tab-header-area .tab-header-background  {
+    -fx-background-color: #ffffff;
+}
+
+.text-field {
+    -fx-border-radius: 0;
+    -fx-background-radius: 0;
+}
+
+.menu-bar   {
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
+    -fx-border-color: #e1e1e1;
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #444444;
+}
