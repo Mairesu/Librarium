@@ -24,18 +24,18 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem mnemonicParsing="false" text="Exit application" />
+              <MenuItem fx:id="exitAppButton" mnemonicParsing="false" text="Exit application" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Admin">
             <items>
-              <MenuItem mnemonicParsing="false" text="Authorize" />
-                  <MenuItem disable="true" mnemonicParsing="false" text="Manage branches" />
+              <MenuItem fx:id="adminAuthorizeButton" mnemonicParsing="false" text="Authorize" />
+                  <MenuItem fx:id="adminBranchesButton" disable="true" mnemonicParsing="false" text="Manage branches" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
             <items>
-              <MenuItem mnemonicParsing="false" text="About" />
+              <MenuItem fx:id="helpAboutButton" mnemonicParsing="false" text="About" />
             </items>
           </Menu>
         </menus>
@@ -59,12 +59,12 @@
                         <content>
                           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="326.0" prefWidth="225.0">
                                  <children>
-                                    <Button layoutY="20.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="225.0" text="Create loan" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" />
-                                    <Button layoutY="70.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="225.0" text="Return loan" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" />
-                                    <Button layoutY="120.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="225.0" text="Extend loan" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" />
-                                    <Button layoutY="170.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="225.0" text="Register new borrower" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" />
-                                    <Button layoutY="220.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="225.0" text="Add new book" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" />
-                                    <Button layoutY="270.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="225.0" text="Register book to barcode" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" />
+                                    <Button fx:id="loanCreateButton" layoutY="20.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="225.0" text="Create loan" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" />
+                                    <Button fx:id="loanReturnButton" layoutY="70.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="225.0" text="Return loan" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" />
+                                    <Button fx:id="loanExtendButton" layoutY="120.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="225.0" text="Extend loan" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" />
+                                    <Button fx:id="registerBorrowerButton" layoutY="170.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="225.0" text="Register new borrower" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" />
+                                    <Button fx:id="newBookButton" layoutY="220.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="225.0" text="Add new book" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" />
+                                    <Button fx:id="linkBarcodeBookButton" layoutY="270.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="225.0" text="Register book to barcode" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" />
                                  </children></AnchorPane>
                         </content>
                       </Tab>
@@ -72,8 +72,8 @@
                            <content>
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="326.0" prefWidth="225.0">
                                  <children>
-                                    <Button layoutY="20.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="225.0" text="Edit borrower" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" />
-                                    <Button layoutY="70.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="225.0" text="Remove/Edit barcode from book" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" />
+                                    <Button fx:id="editBorrowerButton" layoutY="20.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="225.0" text="Edit borrower" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" />
+                                    <Button fx:id="modifyBarcodeButton" layoutY="70.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="225.0" text="Remove/Edit barcode from book" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" />
                                  </children>
                               </AnchorPane>
                            </content>
@@ -129,37 +129,37 @@
                                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                             </rowConstraints>
                                              <children>
-                                                <TextField promptText="Book Title">
+                                                <TextField fx:id="bookSearchTitle" promptText="Book Title">
                                                    <GridPane.margin>
                                                       <Insets left="8.0" right="8.0" />
                                                    </GridPane.margin>
                                                 </TextField>
-                                                <TextField promptText="Author" GridPane.columnIndex="1">
+                                                <TextField fx:id="bookSearchAuthor" promptText="Author" GridPane.columnIndex="1">
                                                    <GridPane.margin>
                                                       <Insets left="8.0" right="8.0" />
                                                    </GridPane.margin>
                                                 </TextField>
-                                                <TextField promptText="Publisher" GridPane.columnIndex="2">
+                                                <TextField fx:id="bookSearchPublisher" promptText="Publisher" GridPane.columnIndex="2">
                                                    <GridPane.margin>
                                                       <Insets left="8.0" right="8.0" />
                                                    </GridPane.margin>
                                                 </TextField>
-                                                <TextField promptText="Edition" GridPane.columnIndex="3">
+                                                <TextField fx:id="bookSearchEdition" promptText="Edition" GridPane.columnIndex="3">
                                                    <GridPane.margin>
                                                       <Insets left="8.0" right="8.0" />
                                                    </GridPane.margin>
                                                 </TextField>
-                                                <TextField promptText="Year" GridPane.columnIndex="4">
+                                                <TextField fx:id="bookSearchYear" promptText="Year" GridPane.columnIndex="4">
                                                    <GridPane.margin>
                                                       <Insets left="8.0" right="8.0" />
                                                    </GridPane.margin>
                                                 </TextField>
                                                 <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="6">
                                                    <children>
-                                                      <Button layoutX="12.0" layoutY="29.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="163.0" text="Search" />
+                                                      <Button fx:id="bookSearchInitButton" layoutX="12.0" layoutY="29.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="163.0" text="Search" />
                                                    </children>
                                                 </AnchorPane>
-                                                <ComboBox prefWidth="150.0" promptText="Library Branch" GridPane.columnIndex="5">
+                                                <ComboBox fx:id="bookSearchBranchDropdown" prefWidth="150.0" promptText="Library Branch" GridPane.columnIndex="5">
                                                    <GridPane.margin>
                                                       <Insets left="8.0" right="8.0" />
                                                    </GridPane.margin>
@@ -176,32 +176,32 @@
                                        <children>
                                           <GridPane prefHeight="87.0" prefWidth="1045.0">
                                              <children>
-                                                <TextField promptText="Barcode">
+                                                <TextField fx:id="loanSearchBarcode" promptText="Barcode">
                                                    <GridPane.margin>
                                                       <Insets left="8.0" right="8.0" />
                                                    </GridPane.margin>
                                                 </TextField>
-                                                <TextField promptText="Borrower Name" GridPane.columnIndex="1">
+                                                <TextField fx:id="loanSearchBorrowerName" promptText="Borrower Name" GridPane.columnIndex="1">
                                                    <GridPane.margin>
                                                       <Insets left="8.0" right="8.0" />
                                                    </GridPane.margin>
                                                 </TextField>
                                                 <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="6">
                                                    <children>
-                                                      <Button layoutX="12.0" layoutY="29.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="163.0" text="Search" />
+                                                      <Button fx:id="loanSearchInitButton" layoutX="12.0" layoutY="29.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="163.0" text="Search" />
                                                    </children>
                                                 </AnchorPane>
                                                 <AnchorPane prefHeight="87.0" prefWidth="127.0" GridPane.columnIndex="4">
                                                    <children>
-                                                      <CheckBox layoutX="31.0" layoutY="31.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="110.0" text="Loan Active" />
+                                                      <CheckBox fx:id="loanSearchActiveLoans" layoutX="31.0" layoutY="31.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="110.0" text="Loan Active" />
                                                    </children>
                                                 </AnchorPane>
-                                                <DatePicker promptText="Loan Start" GridPane.columnIndex="2">
+                                                <DatePicker fx:id="loanSearchStartDate" promptText="Loan Start" GridPane.columnIndex="2">
                                                    <GridPane.margin>
                                                       <Insets left="8.0" right="8.0" />
                                                    </GridPane.margin>
                                                 </DatePicker>
-                                                <DatePicker promptText="Loan End" GridPane.columnIndex="3">
+                                                <DatePicker fx:id="loanSearchEndDate" promptText="Loan End" GridPane.columnIndex="3">
                                                    <GridPane.margin>
                                                       <Insets left="8.0" right="8.0" />
                                                    </GridPane.margin>
@@ -230,24 +230,24 @@
                                        <children>
                                           <GridPane prefHeight="87.0" prefWidth="1045.0">
                                              <children>
-                                                <TextField promptText="Borrower Name">
+                                                <TextField fx:id="borrowerSearchBorrowerName" promptText="Borrower Name">
                                                    <GridPane.margin>
                                                       <Insets left="8.0" right="8.0" />
                                                    </GridPane.margin>
                                                 </TextField>
-                                                <TextField promptText="Phone Number" GridPane.columnIndex="1">
+                                                <TextField fx:id="borrowerSearchPhone" promptText="Phone Number" GridPane.columnIndex="1">
                                                    <GridPane.margin>
                                                       <Insets left="8.0" right="8.0" />
                                                    </GridPane.margin>
                                                 </TextField>
-                                                <TextField promptText="Loaned Barcode" GridPane.columnIndex="2">
+                                                <TextField fx:id="borrowerSearchBarcode" promptText="Loaned Barcode" GridPane.columnIndex="2">
                                                    <GridPane.margin>
                                                       <Insets left="8.0" right="8.0" />
                                                    </GridPane.margin>
                                                 </TextField>
                                                 <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="6">
                                                    <children>
-                                                      <Button layoutX="12.0" layoutY="29.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="163.0" text="Search" />
+                                                      <Button fx:id="borrowerSearchInitButton" layoutX="12.0" layoutY="29.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="163.0" text="Search" />
                                                    </children>
                                                 </AnchorPane>
                                              </children>
