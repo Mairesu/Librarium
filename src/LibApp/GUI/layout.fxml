@@ -24,12 +24,13 @@
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
+              <MenuItem mnemonicParsing="false" text="Exit application" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Edit">
+          <Menu mnemonicParsing="false" text="Admin">
             <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
+              <MenuItem mnemonicParsing="false" text="Authorize" />
+                  <MenuItem disable="true" mnemonicParsing="false" text="Manage branches" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Help">
@@ -54,60 +55,27 @@
                <children>
                   <TabPane prefHeight="425.0" prefWidth="221.0" tabClosingPolicy="UNAVAILABLE">
                     <tabs>
-                      <Tab text=" Search ">
-                           <content>
-                              <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                                 <children>
-                                    <GridPane prefHeight="150.0" prefWidth="221.0">
-                                      <columnConstraints>
-                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                      </columnConstraints>
-                                      <rowConstraints>
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                      </rowConstraints>
-                                       <padding>
-                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                       </padding>
-                                       <children>
-                                          <AnchorPane prefHeight="200.0" prefWidth="200.0">
-                                             <children>
-                                                <Button layoutY="5.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="221.0" text="Search Books" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="2.0">
-                                                   <font>
-                                                      <Font size="14.0" />
-                                                   </font></Button>
-                                             </children>
-                                          </AnchorPane>
-                                          <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
-                                             <children>
-                                                <Button layoutY="5.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="221.0" text="Search Loans" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="2.0">
-                                                   <font>
-                                                      <Font size="14.0" />
-                                                   </font></Button>
-                                             </children>
-                                          </AnchorPane>
-                                          <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
-                                             <children>
-                                                <Button layoutY="5.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="221.0" text="Search Borrowers" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="2.0">
-                                                   <font>
-                                                      <Font size="14.0" />
-                                                   </font></Button>
-                                             </children>
-                                          </AnchorPane>
-                                       </children>
-                                    </GridPane>
-                                 </children></AnchorPane>
-                           </content>
-                      </Tab>
-                      <Tab text=" Manage ">
+                      <Tab text="   Manage   ">
                         <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="326.0" prefWidth="225.0">
+                                 <children>
+                                    <Button layoutY="20.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="225.0" text="Create loan" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" />
+                                    <Button layoutY="70.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="225.0" text="Return loan" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" />
+                                    <Button layoutY="120.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="225.0" text="Extend loan" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" />
+                                    <Button layoutY="170.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="225.0" text="Register new borrower" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" />
+                                    <Button layoutY="220.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="225.0" text="Add new book" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" />
+                                    <Button layoutY="270.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="225.0" text="Register book to barcode" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" />
+                                 </children></AnchorPane>
                         </content>
                       </Tab>
-                        <Tab text=" Administrate ">
+                        <Tab text="   Administrate   ">
                            <content>
-                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="326.0" prefWidth="225.0">
+                                 <children>
+                                    <Button layoutY="20.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="225.0" text="Edit borrower" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" />
+                                    <Button layoutY="70.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="225.0" text="Remove/Edit barcode from book" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" />
+                                 </children>
+                              </AnchorPane>
                            </content>
                         </Tab>
                     </tabs>
@@ -126,12 +94,11 @@
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
               <rowConstraints>
-                <RowConstraints maxHeight="236.0" minHeight="0.0" prefHeight="31.0" vgrow="SOMETIMES" />
                 <RowConstraints maxHeight="480.0" minHeight="10.0" prefHeight="95.0" vgrow="SOMETIMES" />
                 <RowConstraints maxHeight="601.0" minHeight="10.0" prefHeight="594.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <TableView prefHeight="593.0" prefWidth="1044.0" GridPane.rowIndex="2">
+                  <TableView prefHeight="593.0" prefWidth="1044.0" GridPane.rowIndex="1">
                     <columns>
                       <TableColumn prefWidth="75.0" text="C1" />
                       <TableColumn prefWidth="75.0" text="C2" />
@@ -140,69 +107,169 @@
                         <Insets bottom="25.0" right="5.0" top="5.0" />
                      </GridPane.margin>
                   </TableView>
-                  <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+                  <AnchorPane prefHeight="200.0" prefWidth="200.0">
                      <children>
-                        <GridPane prefHeight="90.0" prefWidth="1044.0">
-                          <columnConstraints>
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="917.0" minWidth="10.0" prefWidth="860.0" />
-                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="517.0" minWidth="10.0" prefWidth="184.0" />
-                          </columnConstraints>
-                          <rowConstraints>
-                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                          </rowConstraints>
-                           <children>
-                              <AnchorPane prefHeight="200.0" prefWidth="200.0" />
-                              <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
-                                 <children>
-                                    <Button layoutX="6.0" layoutY="37.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="170.0" text="Search">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </Button>
-                                 </children>
-                              </AnchorPane>
-                              <GridPane prefHeight="90.0" prefWidth="1044.0">
-                                 <children>
-                                    <TextField prefHeight="35.0" prefWidth="157.0" promptText="Title" GridPane.rowIndex="1">
-                                       <GridPane.margin>
-                                          <Insets left="5.0" right="10.0" />
-                                       </GridPane.margin>
-                                    </TextField>
-                                    <TextField prefHeight="35.0" prefWidth="157.0" promptText="Author" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                                       <GridPane.margin>
-                                          <Insets left="5.0" right="10.0" />
-                                       </GridPane.margin>
-                                    </TextField>
-                                    <TextField prefHeight="35.0" prefWidth="157.0" promptText="Year" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                                       <GridPane.margin>
-                                          <Insets left="5.0" right="10.0" />
-                                       </GridPane.margin>
-                                    </TextField>
-                                    <TextField prefHeight="35.0" prefWidth="157.0" promptText="Publisher" GridPane.columnIndex="3" GridPane.rowIndex="1">
-                                       <GridPane.margin>
-                                          <Insets left="5.0" right="10.0" />
-                                       </GridPane.margin>
-                                    </TextField>
-                                    <TextField prefHeight="35.0" prefWidth="157.0" promptText="Edition" GridPane.columnIndex="4" GridPane.rowIndex="1">
-                                       <GridPane.margin>
-                                          <Insets left="5.0" right="10.0" />
-                                       </GridPane.margin>
-                                    </TextField>
-                                 </children>
-                                 <columnConstraints>
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                                 </columnConstraints>
-                                 <rowConstraints>
-                                    <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="18.0" vgrow="SOMETIMES" />
-                                    <RowConstraints maxHeight="72.0" minHeight="10.0" prefHeight="72.0" vgrow="SOMETIMES" />
-                                 </rowConstraints>
-                              </GridPane>
-                           </children>
-                        </GridPane>
+                        <TabPane prefHeight="116.0" prefWidth="1045.0" tabClosingPolicy="UNAVAILABLE">
+                          <tabs>
+                            <Tab text="   Search books   ">
+                              <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <GridPane prefHeight="87.0" prefWidth="1045.0">
+                                            <columnConstraints>
+                                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="144.0" minWidth="10.0" prefWidth="113.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="187.0" minWidth="10.0" prefWidth="185.0" />
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                            </rowConstraints>
+                                             <children>
+                                                <TextField promptText="Book Title">
+                                                   <GridPane.margin>
+                                                      <Insets left="8.0" right="8.0" />
+                                                   </GridPane.margin>
+                                                </TextField>
+                                                <TextField promptText="Author" GridPane.columnIndex="1">
+                                                   <GridPane.margin>
+                                                      <Insets left="8.0" right="8.0" />
+                                                   </GridPane.margin>
+                                                </TextField>
+                                                <TextField promptText="Publisher" GridPane.columnIndex="2">
+                                                   <GridPane.margin>
+                                                      <Insets left="8.0" right="8.0" />
+                                                   </GridPane.margin>
+                                                </TextField>
+                                                <TextField promptText="Edition" GridPane.columnIndex="3">
+                                                   <GridPane.margin>
+                                                      <Insets left="8.0" right="8.0" />
+                                                   </GridPane.margin>
+                                                </TextField>
+                                                <TextField promptText="Year" GridPane.columnIndex="4">
+                                                   <GridPane.margin>
+                                                      <Insets left="8.0" right="8.0" />
+                                                   </GridPane.margin>
+                                                </TextField>
+                                                <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="6">
+                                                   <children>
+                                                      <Button layoutX="12.0" layoutY="29.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="163.0" text="Search" />
+                                                   </children>
+                                                </AnchorPane>
+                                                <ComboBox prefWidth="150.0" promptText="Library Branch" GridPane.columnIndex="5">
+                                                   <GridPane.margin>
+                                                      <Insets left="8.0" right="8.0" />
+                                                   </GridPane.margin>
+                                                </ComboBox>
+                                             </children>
+                                          </GridPane>
+                                       </children>
+                                    </AnchorPane>
+                              </content>
+                            </Tab>
+                            <Tab text="   Search loans   ">
+                              <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <GridPane prefHeight="87.0" prefWidth="1045.0">
+                                             <children>
+                                                <TextField promptText="Barcode">
+                                                   <GridPane.margin>
+                                                      <Insets left="8.0" right="8.0" />
+                                                   </GridPane.margin>
+                                                </TextField>
+                                                <TextField promptText="Borrower Name" GridPane.columnIndex="1">
+                                                   <GridPane.margin>
+                                                      <Insets left="8.0" right="8.0" />
+                                                   </GridPane.margin>
+                                                </TextField>
+                                                <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="6">
+                                                   <children>
+                                                      <Button layoutX="12.0" layoutY="29.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="163.0" text="Search" />
+                                                   </children>
+                                                </AnchorPane>
+                                                <AnchorPane prefHeight="87.0" prefWidth="127.0" GridPane.columnIndex="4">
+                                                   <children>
+                                                      <CheckBox layoutX="31.0" layoutY="31.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="110.0" text="Loan Active" />
+                                                   </children>
+                                                </AnchorPane>
+                                                <DatePicker promptText="Loan Start" GridPane.columnIndex="2">
+                                                   <GridPane.margin>
+                                                      <Insets left="8.0" right="8.0" />
+                                                   </GridPane.margin>
+                                                </DatePicker>
+                                                <DatePicker promptText="Loan End" GridPane.columnIndex="3">
+                                                   <GridPane.margin>
+                                                      <Insets left="8.0" right="8.0" />
+                                                   </GridPane.margin>
+                                                </DatePicker>
+                                             </children>
+                                             <columnConstraints>
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="187.0" minWidth="10.0" prefWidth="185.0" />
+                                             </columnConstraints>
+                                             <rowConstraints>
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                             </rowConstraints>
+                                          </GridPane>
+                                       </children>
+                                    </AnchorPane>
+                              </content>
+                            </Tab>
+                              <Tab text="   Search borrowers   ">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <GridPane prefHeight="87.0" prefWidth="1045.0">
+                                             <children>
+                                                <TextField promptText="Borrower Name">
+                                                   <GridPane.margin>
+                                                      <Insets left="8.0" right="8.0" />
+                                                   </GridPane.margin>
+                                                </TextField>
+                                                <TextField promptText="Phone Number" GridPane.columnIndex="1">
+                                                   <GridPane.margin>
+                                                      <Insets left="8.0" right="8.0" />
+                                                   </GridPane.margin>
+                                                </TextField>
+                                                <TextField promptText="Loaned Barcode" GridPane.columnIndex="2">
+                                                   <GridPane.margin>
+                                                      <Insets left="8.0" right="8.0" />
+                                                   </GridPane.margin>
+                                                </TextField>
+                                                <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="6">
+                                                   <children>
+                                                      <Button layoutX="12.0" layoutY="29.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="163.0" text="Search" />
+                                                   </children>
+                                                </AnchorPane>
+                                             </children>
+                                             <columnConstraints>
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="187.0" minWidth="10.0" prefWidth="185.0" />
+                                             </columnConstraints>
+                                             <rowConstraints>
+                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                             </rowConstraints>
+                                          </GridPane>
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                              </Tab>
+                          </tabs>
+                        </TabPane>
                      </children>
                   </AnchorPane>
                </children>
