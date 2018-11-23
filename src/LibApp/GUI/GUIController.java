@@ -120,6 +120,8 @@ public class GUIController implements SearchListener {
 
     public void initialize() {
         application = new SQLApplication(debug);
+        application.addSearchListeners(this);
+        application.connectToDatabase();
         setupMenuBar();
         setupActions();
         setupBookSearch();
@@ -129,24 +131,23 @@ public class GUIController implements SearchListener {
             buildDebugMenu();
             System.out.println("Debug: " + application.isDebug());
         }
-        application.connectToDatabase();
     }
 
     public void setupMenuBar()  {
 
-        exitAppButton.setOnAction((ActionEvent Event) ->  {
+        exitAppButton.setOnAction((ActionEvent e) ->  {
             System.out.println("Exit app clicked");
         });
 
-        adminAuthorizeButton.setOnAction((ActionEvent Event) ->  {
+        adminAuthorizeButton.setOnAction((ActionEvent e) ->  {
             System.out.println("Authorize clicked");
         });
         //TODO make the form update the branches dropdown after completion
-        adminBranchesButton.setOnAction((ActionEvent Event) ->  {
+        adminBranchesButton.setOnAction((ActionEvent e) ->  {
             System.out.println("Branches clicked");
         });
 
-        helpAboutButton.setOnAction((ActionEvent Event) ->  {
+        helpAboutButton.setOnAction((ActionEvent e) ->  {
             System.out.println("Help clicked");
         });
     }
@@ -154,46 +155,46 @@ public class GUIController implements SearchListener {
     public void setupActions()  {
 
         //######## Manage tab ########
-        loanCreateButton.setOnMouseClicked((MouseEvent Event) -> {
+        loanCreateButton.setOnMouseClicked((MouseEvent e) -> {
             System.out.println("Create loan button pressed");
         });
 
-        loanReturnButton.setOnMouseClicked((MouseEvent Event) -> {
+        loanReturnButton.setOnMouseClicked((MouseEvent e) -> {
             System.out.println("Return loan button pressed");
         });
 
-        loanExtendButton.setOnMouseClicked((MouseEvent Event) -> {
+        loanExtendButton.setOnMouseClicked((MouseEvent e) -> {
             System.out.println("Extend loan button pressed");
         });
 
-        registerBorrowerButton.setOnMouseClicked((MouseEvent Event) -> {
+        registerBorrowerButton.setOnMouseClicked((MouseEvent e) -> {
             System.out.println("Register borrower button pressed");
         });
 
-        newBookButton.setOnMouseClicked((MouseEvent Event) -> {
+        newBookButton.setOnMouseClicked((MouseEvent e) -> {
             System.out.println("New book button pressed");
         });
 
-        linkBarcodeBookButton.setOnMouseClicked((MouseEvent Event) -> {
+        linkBarcodeBookButton.setOnMouseClicked((MouseEvent e) -> {
             System.out.println("Link barcode button pressed");
         });
 
         //######## Administrate tab ########
-        editBorrowerButton.setOnMouseClicked((MouseEvent Event) -> {
+        editBorrowerButton.setOnMouseClicked((MouseEvent e) -> {
             System.out.println("Edit borrower button pressed");
         });
 
-        modifyBarcodeButton.setOnMouseClicked((MouseEvent Event) -> {
+        modifyBarcodeButton.setOnMouseClicked((MouseEvent e) -> {
             System.out.println("Modify barcode button pressed");
         });
     }
 
     private void setupBookSearch()  {
-        bookSearchBranchDropdown.setOnMouseClicked((MouseEvent Event) ->  {
+        bookSearchBranchDropdown.setOnMouseClicked((MouseEvent e) ->  {
             System.out.println("Branch dropdown clicked");
         });
 
-        bookSearchInitButton.setOnMouseClicked((MouseEvent Event) ->    {
+        bookSearchInitButton.setOnMouseClicked((MouseEvent e) ->    {
             System.out.println("Search initiated");
             System.out.println(bookSearchTitle.getText());
             System.out.println(bookSearchAuthor.getText());
@@ -204,19 +205,19 @@ public class GUIController implements SearchListener {
     }
 
     private void setupLoanSearch()  {
-        loanSearchStartDate.setOnMouseClicked((MouseEvent Event) -> {
+        loanSearchStartDate.setOnMouseClicked((MouseEvent e) -> {
             System.out.println("Start date clicked");
         });
 
-        loanSearchEndDate.setOnMouseClicked((MouseEvent Event) -> {
+        loanSearchEndDate.setOnMouseClicked((MouseEvent e) -> {
             System.out.println("End date clicked");
         });
 
-        loanSearchActiveLoans.setOnMouseClicked((MouseEvent Event) ->   {
+        loanSearchActiveLoans.setOnMouseClicked((MouseEvent e) ->   {
             System.out.println("Active loans clicked");
         });
 
-        loanSearchInitButton.setOnMouseClicked((MouseEvent Event) ->    {
+        loanSearchInitButton.setOnMouseClicked((MouseEvent e) ->    {
             System.out.println("Loan search initiated");
             System.out.println(loanSearchBarcode.getText());
             System.out.println(loanSearchBorrowerName.getText());
@@ -232,7 +233,7 @@ public class GUIController implements SearchListener {
 
     private void setupBorrowerSearch()  {
 
-        borrowerSearchInitButton.setOnMouseClicked((MouseEvent Event) ->    {
+        borrowerSearchInitButton.setOnMouseClicked((MouseEvent e) ->    {
             System.out.println("Borrower search initiated");
             System.out.println(borrowerSearchBarcode.getText());
             System.out.println(borrowerSearchBorrowerName.getText());
@@ -245,13 +246,17 @@ public class GUIController implements SearchListener {
 
             Menu debugMenu = new Menu("Debug");
 
-            MenuItem dropDatabaseButton = new MenuItem("Drop DB");
             MenuItem rebuildDatabaseButton = new MenuItem("Rebuild DB");
             MenuItem fillDatabaseButton = new MenuItem("Fill DB");
 
-            debugMenu.getItems().addAll(dropDatabaseButton, rebuildDatabaseButton, fillDatabaseButton);
+            rebuildDatabaseButton.setOnAction((ActionEvent e) -> {
+                application.debugRebuildDatabase();
+            });
+
+            debugMenu.getItems().addAll(rebuildDatabaseButton, fillDatabaseButton);
 
             menuBar.getMenus().add(debugMenu);
+
         }
     }
 
@@ -270,5 +275,11 @@ public class GUIController implements SearchListener {
     @Override
     public void onBorrowersSearched() {
 
+    }
+
+    @Override
+    public void onDebugAlert(String alertMessage) {
+        Alert debugAlert = new Alert(Alert.AlertType.INFORMATION, alertMessage, ButtonType.OK);
+        debugAlert.showAndWait();
     }
 }

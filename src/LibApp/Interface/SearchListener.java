@@ -8,4 +8,6 @@ public interface SearchListener {
     public void onLoansSearched();
 
     public void onBorrowersSearched();
+
+    public void onDebugAlert(String alertMessage);
 }
