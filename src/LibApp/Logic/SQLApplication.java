@@ -53,6 +53,14 @@ public class SQLApplication {
         }
     }
 
+    public void debugClearDatabase() {
+        executeSQLStatement("DROP TABLE IF EXISTS publisher");
+
+        for(SearchListener s : listeners)   {
+            s.onDebugAlert("Database cleared");
+        }
+    }
+
     public void debugRebuildDatabase()    {
         executeSQLStatement("DROP TABLE IF EXISTS publisher");
         executeSQLStatement("CREATE TABLE IF NOT EXISTS publisher (" +

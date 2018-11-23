@@ -246,14 +246,19 @@ public class GUIController implements SearchListener {
 
             Menu debugMenu = new Menu("Debug");
 
+            MenuItem clearDatabaseButton = new MenuItem("Clear DB");
             MenuItem rebuildDatabaseButton = new MenuItem("Rebuild DB");
             MenuItem fillDatabaseButton = new MenuItem("Fill DB");
+
+            clearDatabaseButton.setOnAction((ActionEvent e) ->  {
+                application.debugClearDatabase();
+            });
 
             rebuildDatabaseButton.setOnAction((ActionEvent e) -> {
                 application.debugRebuildDatabase();
             });
 
-            debugMenu.getItems().addAll(rebuildDatabaseButton, fillDatabaseButton);
+            debugMenu.getItems().addAll(clearDatabaseButton, rebuildDatabaseButton, fillDatabaseButton);
 
             menuBar.getMenus().add(debugMenu);
 
@@ -280,6 +285,8 @@ public class GUIController implements SearchListener {
     @Override
     public void onDebugAlert(String alertMessage) {
         Alert debugAlert = new Alert(Alert.AlertType.INFORMATION, alertMessage, ButtonType.OK);
+        debugAlert.setHeaderText("Debug message");
+        debugAlert.setTitle("Information");
         debugAlert.showAndWait();
     }
 }
