@@ -2,6 +2,10 @@ package LibApp.Logic;
 
 import LibApp.Interface.SearchListener;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -14,6 +18,7 @@ public class SQLApplication {
     private boolean debug = false;
     private String url;
     private final List<SearchListener> listeners = new LinkedList<>();
+    private Connection connection;
 
     public SQLApplication(boolean debug)   {
         this.debug = debug;
@@ -30,9 +35,8 @@ public class SQLApplication {
     }
 
     public void connectToDatabase() {
-        Connection connection = null;
         try {
-            this.url = "jdbc:sqlite:libraryDatabase.db";
+            url = "jdbc:sqlite:libraryDatabase.db";
             connection = DriverManager.getConnection(url);
 
             System.out.println("Connection to Database successful");
@@ -55,22 +59,38 @@ public class SQLApplication {
 
     public void debugClearDatabase() {
         executeSQLStatement("DROP TABLE IF EXISTS publisher");
+        executeSQLStatement("DROP TABLE IF EXISTS city");
 
         for(SearchListener s : listeners)   {
             s.onDebugAlert("Database cleared");
         }
     }
 
+
     public void debugRebuildDatabase()    {
-        executeSQLStatement("DROP TABLE IF EXISTS publisher");
-        executeSQLStatement("CREATE TABLE IF NOT EXISTS publisher (" +
-                    "\npublisher_id integer NOT NULL UNIQUE," +
-                    "\npublisher_name varchar(255) NOT NULL," +
-                    "\nPRIMARY KEY (publisher_id)" +
-                "\n);");
+
+        String filePath = "src/LibApp/Data/createDB.sql";
+        StringBuilder streamString = new StringBuilder();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath)))  {
+                String sCurrentLine;
+                while ((sCurrentLine = br.readLine()) != null) {
+                    streamString.append(sCurrentLine);
+                    streamString.append("\n");
+                }
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+
+        String[] statements = streamString.toString().split(";");
+        for (String s : statements) {
+            executeSQLStatement(s);
+        }
 
         for(SearchListener s : listeners)   {
             s.onDebugAlert("Database rebuilt");
         }
+
     }
+
 }
