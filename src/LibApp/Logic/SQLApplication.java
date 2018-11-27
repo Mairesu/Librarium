@@ -10,8 +10,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class SQLApplication {
 
@@ -58,39 +57,60 @@ public class SQLApplication {
     }
 
     public void debugClearDatabase() {
-        executeSQLStatement("DROP TABLE IF EXISTS publisher");
-        executeSQLStatement("DROP TABLE IF EXISTS city");
+        Iterator<String> sqlStatements = readSqlFile("src/LibApp/Data/clearDB.sql");
+
+        while(sqlStatements.hasNext())  {
+            executeSQLStatement(sqlStatements.next());
+        }
 
         for(SearchListener s : listeners)   {
             s.onDebugAlert("Database cleared");
         }
     }
 
-
     public void debugRebuildDatabase()    {
 
-        String filePath = "src/LibApp/Data/createDB.sql";
-        StringBuilder streamString = new StringBuilder();
+        Iterator<String> sqlStatements = readSqlFile("src/LibApp/Data/createDB.sql");
 
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath)))  {
-                String sCurrentLine;
-                while ((sCurrentLine = br.readLine()) != null) {
-                    streamString.append(sCurrentLine);
-                    streamString.append("\n");
-                }
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-        }
-
-        String[] statements = streamString.toString().split(";");
-        for (String s : statements) {
-            executeSQLStatement(s);
+        while(sqlStatements.hasNext())  {
+            executeSQLStatement(sqlStatements.next());
         }
 
         for(SearchListener s : listeners)   {
             s.onDebugAlert("Database rebuilt");
         }
+    }
 
+    public void debugFillDatabase() {
+
+        Iterator<String> sqlStatements = readSqlFile("src/LibApp/Data/fillDB.sql");
+
+        while(sqlStatements.hasNext())  {
+            executeSQLStatement(sqlStatements.next());
+        }
+
+        for(SearchListener s : listeners)   {
+            s.onDebugAlert("Database filled with dummy data");
+        }
+    }
+
+    public Iterator<String> readSqlFile(String filePath)   {
+
+        StringBuilder streamString = new StringBuilder();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath)))  {
+            String sCurrentLine;
+            while ((sCurrentLine = br.readLine()) != null) {
+                streamString.append(sCurrentLine);
+                streamString.append("\n");
+            }
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+
+        ArrayList<String> sqlStatements = new ArrayList<>(Arrays.asList(streamString.toString().split(";")));
+
+        return sqlStatements.iterator();
     }
 
 }

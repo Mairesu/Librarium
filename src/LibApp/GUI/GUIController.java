@@ -258,6 +258,10 @@ public class GUIController implements SearchListener {
                 application.debugRebuildDatabase();
             });
 
+            fillDatabaseButton.setOnAction((ActionEvent e) ->   {
+                application.debugFillDatabase();
+            });
+
             debugMenu.getItems().addAll(clearDatabaseButton, rebuildDatabaseButton, fillDatabaseButton);
 
             menuBar.getMenus().add(debugMenu);
