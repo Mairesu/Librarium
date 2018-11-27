@@ -50,9 +50,9 @@ CREATE TABLE IF NOT EXISTS book (
   book_id integer PRIMARY KEY,
   book_title varchar(255) NOT NULL,
   publication_year integer NOT NULL,
-  edition integer,
-  publisher integer NOT NULL,
-  FOREIGN KEY (publisher) REFERENCES publisher(publisher_id)
+  edition varchar(127),
+  publisher_id integer,
+  FOREIGN KEY (publisher_id) REFERENCES publisher(publisher_id)
 );
 
 

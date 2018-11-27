@@ -10,4 +10,6 @@ public interface SearchListener {
     public void onBorrowersSearched();
 
     public void onDebugAlert(String alertMessage);
+
+    public void onAuthorize();
 }

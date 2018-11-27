@@ -293,4 +293,10 @@ public class GUIController implements SearchListener {
         debugAlert.setTitle("Information");
         debugAlert.showAndWait();
     }
+
+    //TODO Implement Admin authorization
+    @Override
+    public void onAuthorize()   {
+
+    }
 }
