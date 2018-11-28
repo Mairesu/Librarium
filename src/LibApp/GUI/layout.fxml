@@ -68,7 +68,7 @@
                                  </children></AnchorPane>
                         </content>
                       </Tab>
-                        <Tab text="   Administrate   ">
+                        <Tab fx:id="administrateTab" text="   Administrate   ">
                            <content>
                               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="326.0" prefWidth="225.0">
                                  <children>
@@ -98,11 +98,7 @@
                 <RowConstraints maxHeight="601.0" minHeight="10.0" prefHeight="594.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <TableView prefHeight="593.0" prefWidth="1044.0" GridPane.rowIndex="1">
-                    <columns>
-                      <TableColumn prefWidth="75.0" text="C1" />
-                      <TableColumn prefWidth="75.0" text="C2" />
-                    </columns>
+                  <TableView fx:id="resultTable" prefHeight="593.0" prefWidth="1044.0" GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets bottom="25.0" right="5.0" top="5.0" />
                      </GridPane.margin>

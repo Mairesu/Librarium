@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
 
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 public class GUIController implements SearchListener {
 
@@ -54,6 +55,10 @@ public class GUIController implements SearchListener {
 
 
     //  ######## Administrate tab ########
+
+    @FXML
+    private Tab administrateTab;
+
     @FXML
     private Button editBorrowerButton;
 
@@ -118,6 +123,12 @@ public class GUIController implements SearchListener {
     private Button borrowerSearchInitButton;
 
 
+    //  ######## Other ########
+
+    @FXML
+    private TableView resultTable;
+
+
     public void initialize() {
         application = new SQLApplication(debug);
         application.addSearchListeners(this);
@@ -133,7 +144,7 @@ public class GUIController implements SearchListener {
         }
     }
 
-    public void setupMenuBar()  {
+    private void setupMenuBar()  {
 
         exitAppButton.setOnAction((ActionEvent e) ->  {
             System.out.println("Exit app clicked");
@@ -141,10 +152,12 @@ public class GUIController implements SearchListener {
 
         adminAuthorizeButton.setOnAction((ActionEvent e) ->  {
             System.out.println("Authorize clicked");
+            buildAuthorizationMenu();
         });
         //TODO make the form update the branches dropdown after completion
         adminBranchesButton.setOnAction((ActionEvent e) ->  {
             System.out.println("Branches clicked");
+            addBranchDialog();
         });
 
         helpAboutButton.setOnAction((ActionEvent e) ->  {
@@ -152,7 +165,7 @@ public class GUIController implements SearchListener {
         });
     }
 
-    public void setupActions()  {
+    private void setupActions()  {
 
         //######## Manage tab ########
         loanCreateButton.setOnMouseClicked((MouseEvent e) -> {
@@ -180,6 +193,11 @@ public class GUIController implements SearchListener {
         });
 
         //######## Administrate tab ########
+
+        if(!application.getAuthorized())    {
+            administrateTab.setDisable(true);
+        }
+
         editBorrowerButton.setOnMouseClicked((MouseEvent e) -> {
             System.out.println("Edit borrower button pressed");
         });
@@ -269,6 +287,39 @@ public class GUIController implements SearchListener {
         }
     }
 
+    private void buildAuthorizationMenu()   {
+        if(application.getAuthorized()) {
+            application.adminLogOut();
+            administrateTab.setDisable(true);
+            adminBranchesButton.setDisable(true);
+            adminAuthorizeButton.setText("Authorize");
+            Alert logoutAlert = new Alert(Alert.AlertType.CONFIRMATION, "Log out successful", ButtonType.OK);
+            logoutAlert.setHeaderText("Success");
+            logoutAlert.showAndWait();
+
+        }
+        else {
+            TextInputDialog authDialog = new TextInputDialog();
+            authDialog.setTitle("Authorization");
+            authDialog.setHeaderText("Admin Authorization");
+            authDialog.setContentText("Please enter the admin password");
+            Optional<String> result = authDialog.showAndWait();
+            result.ifPresent(password -> application.authorizeAsAdmin(password));
+        }
+
+    }
+
+    private void addBranchDialog()  {
+
+        //TODO do queries for creating a new library branch
+
+        buildBranchDropdown();
+    }
+
+    private void buildBranchDropdown()  {
+        application.getAllBranches();
+    }
+
 
     //TODO when called through the interface, have the table update with the corresponding information
     @Override
@@ -294,9 +345,22 @@ public class GUIController implements SearchListener {
         debugAlert.showAndWait();
     }
 
-    //TODO Implement Admin authorization
     @Override
-    public void onAuthorize()   {
+    public void onAuthorize(boolean success)   {
+        Alert authAlert;
 
+        if(success) {
+            authAlert = new Alert(Alert.AlertType.CONFIRMATION, "Authorization successful", ButtonType.OK);
+            authAlert.setHeaderText("Success");
+            authAlert.showAndWait();
+            administrateTab.setDisable(false);
+            adminBranchesButton.setDisable(false);
+            adminAuthorizeButton.setText("Admin log out");
+        }
+        else {
+            authAlert = new Alert(Alert.AlertType.ERROR, "Authorization failed", ButtonType.OK);
+            authAlert.setHeaderText("Error");
+            authAlert.showAndWait();
+        }
     }
 }
