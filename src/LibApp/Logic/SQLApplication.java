@@ -1,6 +1,7 @@
 package LibApp.Logic;
 
 import LibApp.Interface.SearchListener;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -22,11 +23,12 @@ public class SQLApplication {
     private String password = "Password";
 
     private String url;
-    private final List<SearchListener> listeners = new LinkedList<>();
     private Connection connection;
+    private final List<SearchListener> listeners = new LinkedList<>();
 
     public SQLApplication(boolean debug)   {
         this.debug = debug;
+        this.connection = connectToDatabase();
     }
 
     public boolean isDebug()    {
@@ -58,48 +60,55 @@ public class SQLApplication {
         return this.authorized;
     }
 
-    public void connectToDatabase() {
-        try {
-            url = "jdbc:sqlite:libraryDatabase.db";
-            connection = DriverManager.getConnection(url);
+    public Connection connectToDatabase() {
 
+        url = "jdbc:sqlite:libraryDatabase.db";
+        Connection connection = null;
+
+        try {
+            connection = DriverManager.getConnection(url);
             System.out.println("Connection to Database successful");
+
         }
         catch (SQLException e)   {
             System.err.println(e.getMessage());
         }
+
+        return connection;
     }
 
-    //TODO Fix this garbage and make it work somehow.
-    public Iterator getAllBranches()    {
-        String sql = "SELECT zipcode FROM city";
+    public Iterator<String> getAllBranches()    {
 
-        try (ResultSet resultSet = executeSqlQuery(sql)){
+        ArrayList<String> strings = new ArrayList<>();
+
+        String sql = "SELECT lb.branch_name, ad.street_address " +
+                "FROM library_branch lb, address ad " +
+                "WHERE lb.branch_address_id = ad.address_id;";
+
+        try (Statement stmt  = connection.createStatement();
+             ResultSet resultSet    = stmt.executeQuery(sql)){
 
             while (resultSet.next()) {
-                System.out.println(resultSet.getInt(0));
+                 strings.add(resultSet.getString("branch_name") + ", " +
+                         resultSet.getString("street_address"));
             }
-        }
-        catch (SQLException e)  {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 
-        return null;
+        strings.sort(String::compareToIgnoreCase);
+        return strings.iterator();
     }
 
-    public ResultSet executeSqlQuery(String sqlQuery)  {
+    public Iterator<JSONObject> doBookSearch(String bookTitle, String authorName, String publisher,
+                                             String edition, int year, String branch)  {
 
-        ResultSet resultSet = null;
+        ArrayList<JSONObject> searchResults = new ArrayList<>();
 
-        try (Statement statement = connection.createStatement()) {
+        //TODO create sql query dependent on parameters
+        //TODO handle empty result set
 
-             resultSet = statement.executeQuery(sqlQuery);
-        }
-        catch (SQLException e)   {
-            System.err.println(e.getMessage());
-        }
-
-        return resultSet;
+        return searchResults.iterator();
     }
 
     public void executeSqlStatement(String sqlStatement)    {

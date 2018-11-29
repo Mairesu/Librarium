@@ -6,8 +6,11 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
+import org.json.JSONObject;
 
+import java.time.Year;
 import java.time.format.DateTimeFormatter;
+import java.util.Iterator;
 import java.util.Optional;
 
 public class GUIController implements SearchListener {
@@ -83,7 +86,7 @@ public class GUIController implements SearchListener {
     private TextField bookSearchYear;
 
     @FXML
-    private ComboBox bookSearchBranchDropdown;
+    private ComboBox<String> bookSearchBranchDropdown;
 
     @FXML
     private Button bookSearchInitButton;
@@ -154,7 +157,7 @@ public class GUIController implements SearchListener {
             System.out.println("Authorize clicked");
             buildAuthorizationMenu();
         });
-        //TODO make the form update the branches dropdown after completion
+
         adminBranchesButton.setOnAction((ActionEvent e) ->  {
             System.out.println("Branches clicked");
             addBranchDialog();
@@ -212,14 +215,51 @@ public class GUIController implements SearchListener {
             System.out.println("Branch dropdown clicked");
         });
 
-        bookSearchInitButton.setOnMouseClicked((MouseEvent e) ->    {
-            System.out.println("Search initiated");
-            System.out.println(bookSearchTitle.getText());
-            System.out.println(bookSearchAuthor.getText());
-            System.out.println(bookSearchPublisher.getText());
-            System.out.println(bookSearchEdition.getText());
-            System.out.println(bookSearchYear.getText());
+        bookSearchYear.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                bookSearchYear.setText(newValue.replaceAll("[^\\d]", ""));
+            }
         });
+
+        bookSearchInitButton.setOnMouseClicked((MouseEvent e) ->    {
+            System.out.println("Book search initiated");
+
+            String title = bookSearchTitle.getText();
+            String author = bookSearchAuthor.getText();
+            String publisher = bookSearchPublisher.getText();
+            String edition = bookSearchEdition.getText();
+
+            if(title.equals("") && author.equals("") && publisher.equals("")
+                    && edition.equals("") && bookSearchYear.getText().equals("")
+                    && (bookSearchBranchDropdown.getSelectionModel().isEmpty()
+                        || bookSearchBranchDropdown.getSelectionModel().getSelectedItem().toString().equals("No branch")))   {
+
+                resultTable.getItems().clear();
+                resultTable.setPlaceholder(new Label("Please fill in at least one search field"));
+            }
+            else if(!bookSearchYear.getText().equals(""))   {
+                if(Integer.parseInt(bookSearchYear.getText()) <= (Year.now().getValue())) {
+
+                    Iterator<JSONObject> it = application.doBookSearch(title, author, publisher, edition,
+                                                Integer.parseInt(bookSearchYear.getText()),
+                                                bookSearchBranchDropdown.getSelectionModel().getSelectedItem().toString());
+
+                    while (it.hasNext()) {
+                        //TODO handle result JSON objects and empty result iterators
+                    }
+                }
+                else {
+                    resultTable.getItems().clear();
+                    resultTable.setPlaceholder(new Label("Please input a year that is not in the future"));
+                }
+            }
+            else {
+                Iterator<JSONObject> it = application.doBookSearch(title, author, publisher, edition,
+                        -1, bookSearchBranchDropdown.getSelectionModel().getSelectedItem().toString());
+            }
+        });
+
+        buildBranchDropdown();
     }
 
     private void setupLoanSearch()  {
@@ -317,7 +357,13 @@ public class GUIController implements SearchListener {
     }
 
     private void buildBranchDropdown()  {
-        application.getAllBranches();
+        bookSearchBranchDropdown.getItems().clear();
+        bookSearchBranchDropdown.getItems().add("No branch");
+        Iterator<String> branches= application.getAllBranches();
+
+        while(branches.hasNext())   {
+            bookSearchBranchDropdown.getItems().add(branches.next());
+        }
     }
 
 
