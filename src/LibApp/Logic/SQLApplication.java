@@ -156,10 +156,16 @@ public class SQLApplication {
                         resultSet.getString("barcode_number") + "\t" +
                         resultSet.getString("branch_name") + "\t" +
                         resultSet.getString("street_address"));
-            }
 
-            //TODO create sql query dependent on parameters
-            //TODO handle empty result set
+                searchResults.add(new JSONObject().put("title", resultSet.getString("book_title"))
+                        .put("author", resultSet.getString("author_name"))
+                        .put("publisher", resultSet.getString("publisher_name"))
+                        .put("edition", resultSet.getString("edition"))
+                        .put("year", resultSet.getInt("publication_year"))
+                        .put("barcode", resultSet.getString("barcode_number"))
+                        .put("branch", resultSet.getString("branch_name"))
+                        .put("address", resultSet.getString("street_address")));
+            }
         }
         catch (SQLException e)  {
             System.out.println(e.getMessage());

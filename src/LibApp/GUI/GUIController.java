@@ -1,16 +1,24 @@
 package LibApp.GUI;
 
+import LibApp.Data.BookSearchResultModel;
 import LibApp.Interface.SearchListener;
 import LibApp.Logic.SQLApplication;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.fxml.FXML;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Text;
+import javafx.util.Callback;
 import org.json.JSONObject;
 
 import java.time.Year;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Optional;
 
 public class GUIController implements SearchListener {
@@ -131,7 +139,6 @@ public class GUIController implements SearchListener {
     @FXML
     private TableView resultTable;
 
-
     public void initialize() {
         application = new SQLApplication(debug);
         application.addSearchListeners(this);
@@ -214,6 +221,7 @@ public class GUIController implements SearchListener {
         bookSearchBranchDropdown.setOnMouseClicked((MouseEvent e) ->  {
             System.out.println("Branch dropdown clicked");
         });
+        buildBranchDropdown();
 
         bookSearchYear.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
@@ -236,7 +244,7 @@ public class GUIController implements SearchListener {
                     && (bookSearchBranchDropdown.getSelectionModel().isEmpty()
                     || bookSearchBranchDropdown.getSelectionModel().getSelectedItem().toString().equals("No branch")))   {
 
-                resultTable.getItems().clear();
+                clearTable();
                 resultTable.setPlaceholder(new Label("Please fill in at least one search field"));
             }
             else if(!bookSearchYear.getText().equals(""))   {
@@ -246,37 +254,121 @@ public class GUIController implements SearchListener {
                     if(bookSearchBranchDropdown.getSelectionModel().isEmpty()
                             || bookSearchBranchDropdown.getSelectionModel().getSelectedItem().toString().equals("No branch")) {
 
+                        clearTable();
+                        resultTable.setPlaceholder(new Label("Search yielded no result"));
+
                         it = application.doBookSearch(title, author, publisher, edition,
                                 Integer.parseInt(bookSearchYear.getText()), "");
-
+                        if(it.hasNext())    {
+                            buildBookSearchResult(it);
+                        }
                     }
                     else {
+
+                        clearTable();
+                        resultTable.setPlaceholder(new Label("Search yielded no result"));
 
                         it = application.doBookSearch(title, author, publisher, edition,
                                 Integer.parseInt(bookSearchYear.getText()),
                                 bookSearchBranchDropdown.getSelectionModel().getSelectedItem().toString());
+                        if(it.hasNext())    {
+                            buildBookSearchResult(it);
+                        }
                     }
-
 
                 }
                 else {
-                    resultTable.getItems().clear();
+
+                    clearTable();
                     resultTable.setPlaceholder(new Label("Please input a year that is not in the future"));
                 }
             }
             else if(bookSearchBranchDropdown.getSelectionModel().isEmpty()
                     || bookSearchBranchDropdown.getSelectionModel().getSelectedItem().toString().equals("No branch")) {
 
+                clearTable();
+                resultTable.setPlaceholder(new Label("Search yielded no result"));
+
                 it = application.doBookSearch(title, author, publisher, edition,
                         -1, "");
+                if(it.hasNext())    {
+                    buildBookSearchResult(it);
+                }
+
             }
             else {
+
+                clearTable();
+                resultTable.setPlaceholder(new Label("Search yielded no result"));
+
                 it = application.doBookSearch(title, author, publisher, edition,
                         -1, bookSearchBranchDropdown.getSelectionModel().getSelectedItem().toString());
+                if(it.hasNext())    {
+                    buildBookSearchResult(it);
+                }
             }
         });
+    }
 
-        buildBranchDropdown();
+    private void buildBookSearchResult(Iterator<JSONObject> it)    {
+
+        TableColumn<BookSearchResultModel, String> titleCol = new TableColumn<>("Title");
+        titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+
+        TableColumn<BookSearchResultModel, String> authorCol = new TableColumn<>("Author");
+        authorCol.setCellValueFactory(new PropertyValueFactory<>("author"));
+
+        TableColumn<BookSearchResultModel, String> pubCol = new TableColumn<>("Publisher");
+        pubCol.setCellValueFactory(new PropertyValueFactory<>("publisher"));
+
+        TableColumn<BookSearchResultModel, String> editionCol = new TableColumn<>("Edition");
+        editionCol.setCellValueFactory(new PropertyValueFactory<>("edition"));
+
+        TableColumn<BookSearchResultModel, String> yearCol = new TableColumn<>("Year");
+        yearCol.setCellValueFactory(new PropertyValueFactory<>("year"));
+
+        TableColumn<BookSearchResultModel, String> barcodeCol = new TableColumn<>("Barcode");
+        barcodeCol.setCellValueFactory(new PropertyValueFactory<>("barcode"));
+
+        TableColumn<BookSearchResultModel, String> branchCol = new TableColumn<>("Branch");
+        branchCol.setCellValueFactory(new PropertyValueFactory<>("branch"));
+
+        TableColumn<BookSearchResultModel, String> adrCol = new TableColumn<>("Address");
+        adrCol.setCellValueFactory(new PropertyValueFactory<>("address"));
+
+        resultTable.setEditable(true);
+        resultTable.getColumns().addAll(titleCol, authorCol, pubCol, editionCol,
+                yearCol, barcodeCol, branchCol, adrCol);
+        resultTable.getItems().setAll(observableResultList(it));
+
+    }
+
+    private ObservableList<BookSearchResultModel> observableResultList(Iterator<JSONObject> it)    {
+
+        ObservableList<BookSearchResultModel> observableResults = FXCollections.observableArrayList();
+
+        while (it.hasNext())    {
+            JSONObject jsonObject = it.next();
+            if(!jsonObject.has("edition"))   {
+                jsonObject.put("edition", "------");
+            }
+
+            observableResults.add(new BookSearchResultModel(jsonObject.get("title").toString(),
+                    jsonObject.get("author").toString(),
+                    jsonObject.get("publisher").toString(),
+                    jsonObject.get("edition").toString(),
+                    jsonObject.get("year").toString(),
+                    jsonObject.get("barcode").toString(),
+                    jsonObject.get("branch").toString(),
+                    jsonObject.get("address").toString()));
+        }
+
+        return observableResults;
+    }
+
+    private void clearTable()   {
+        resultTable.getColumns().clear();
+        resultTable.getItems().clear();
     }
 
     private void setupLoanSearch()  {
