@@ -48,13 +48,13 @@ VALUES (1, 11),
        (5, 7);
 
 INSERT INTO author(author_id, author_name, author_birth_date)
-VALUES (1, 'J.K. Rowling', 1965-7-31),
+VALUES (1, 'J.K. Rowling', '1965-7-31'),
        (2, 'Sun Tzu', NULL),
-       (3, 'Knut Knutson', 1969-7-24),
-       (4, 'Knut Knutson', 1934-2-3),
+       (3, 'Knut Knutson', '1969-7-24'),
+       (4, 'Knut Knutson', '1934-2-3'),
        (5, 'Artemis Sin', NULL),
-       (6, 'Joseph Crust', 1989-5-16),
-       (7, 'Ross Bobson', 1989-5-16);
+       (6, 'Joseph Crust', '1989-5-16'),
+       (7, 'Ross Bobson', '1989-5-16');
 
 INSERT INTO publisher(publisher_id, publisher_name)
 VALUES (1, 'Domminion publishing'),
@@ -96,8 +96,8 @@ VALUES (173623, 1, 2),
        (122635, 7, 6);
 
 INSERT INTO loan(loan_id, start_date, end_date, returned_date, borrower_id, barcode_number, library_branch_id)
-VALUES (1, 2017-12-2, 2018-2-2, NULL, 2, 173623, 2),
-       (2, 2018-11-16, 2019-1-16, NULL, 3, 5323, 1),
-       (3, 2018-11-16, 2019-1-16, 2018-12-9, 3, 64639, 1),
-       (4, 2018-10-29, 2019-1-7, NULL, 1, 170934, 2),
-       (5, 2018-10-29, 2019-1-7, 2018-12-1, 4, 127634, 5);
+VALUES (1, '2017-12-2', '2018-2-2', NULL, 2, 173623, 2),
+       (2, '2018-11-16', '2019-1-16', NULL, 3, 5323, 1),
+       (3, '2018-11-16', '2019-1-16', '2018-12-9', 3, 64639, 1),
+       (4, '2018-10-29', '2019-1-7', NULL, 1, 170934, 2),
+       (5, '2018-10-29', '2019-1-7', '2018-12-1', 4, 127634, 5);

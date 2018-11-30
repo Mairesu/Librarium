@@ -1,6 +1,7 @@
 package LibApp.GUI;
 
 import LibApp.Data.BookSearchResultModel;
+import LibApp.Data.BorrowerSearchResultModel;
 import LibApp.Interface.SearchListener;
 import LibApp.Logic.SQLApplication;
 import javafx.collections.FXCollections;
@@ -10,15 +11,11 @@ import javafx.scene.control.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.text.Text;
-import javafx.util.Callback;
 import org.json.JSONObject;
 
 import java.time.Year;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Optional;
 
 public class GUIController implements SearchListener {
@@ -218,9 +215,7 @@ public class GUIController implements SearchListener {
     }
 
     private void setupBookSearch()  {
-        bookSearchBranchDropdown.setOnMouseClicked((MouseEvent e) ->  {
-            System.out.println("Branch dropdown clicked");
-        });
+
         buildBranchDropdown();
 
         bookSearchYear.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -230,7 +225,6 @@ public class GUIController implements SearchListener {
         });
 
         bookSearchInitButton.setOnMouseClicked((MouseEvent e) ->    {
-            System.out.println("Book search initiated");
 
             String title = bookSearchTitle.getText();
             String author = bookSearchAuthor.getText();
@@ -264,7 +258,6 @@ public class GUIController implements SearchListener {
                         }
                     }
                     else {
-
                         clearTable();
                         resultTable.setPlaceholder(new Label("Search yielded no result"));
 
@@ -278,7 +271,6 @@ public class GUIController implements SearchListener {
 
                 }
                 else {
-
                     clearTable();
                     resultTable.setPlaceholder(new Label("Please input a year that is not in the future"));
                 }
@@ -297,7 +289,6 @@ public class GUIController implements SearchListener {
 
             }
             else {
-
                 clearTable();
                 resultTable.setPlaceholder(new Label("Search yielded no result"));
 
@@ -339,11 +330,10 @@ public class GUIController implements SearchListener {
         resultTable.setEditable(true);
         resultTable.getColumns().addAll(titleCol, authorCol, pubCol, editionCol,
                 yearCol, barcodeCol, branchCol, adrCol);
-        resultTable.getItems().setAll(observableResultList(it));
-
+        resultTable.getItems().setAll(observableBookSearchResultList(it));
     }
 
-    private ObservableList<BookSearchResultModel> observableResultList(Iterator<JSONObject> it)    {
+    private ObservableList<BookSearchResultModel> observableBookSearchResultList(Iterator<JSONObject> it)    {
 
         ObservableList<BookSearchResultModel> observableResults = FXCollections.observableArrayList();
 
@@ -366,46 +356,152 @@ public class GUIController implements SearchListener {
         return observableResults;
     }
 
-    private void clearTable()   {
-        resultTable.getColumns().clear();
-        resultTable.getItems().clear();
-    }
-
     private void setupLoanSearch()  {
-        loanSearchStartDate.setOnMouseClicked((MouseEvent e) -> {
-            System.out.println("Start date clicked");
-        });
-
-        loanSearchEndDate.setOnMouseClicked((MouseEvent e) -> {
-            System.out.println("End date clicked");
-        });
-
-        loanSearchActiveLoans.setOnMouseClicked((MouseEvent e) ->   {
-            System.out.println("Active loans clicked");
+        loanSearchBarcode.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                loanSearchBarcode.setText(newValue.replaceAll("[^\\d]", ""));
+            }
         });
 
         loanSearchInitButton.setOnMouseClicked((MouseEvent e) ->    {
-            System.out.println("Loan search initiated");
-            System.out.println(loanSearchBarcode.getText());
-            System.out.println(loanSearchBorrowerName.getText());
-            if(null != loanSearchStartDate.getValue()) {
-                System.out.println("start: " + loanSearchStartDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+
+            String borrowerName = loanSearchBorrowerName.getText();
+            boolean isActive = loanSearchActiveLoans.isSelected();
+            String startDateString = "";
+            String endDateString = "";
+
+            Iterator<JSONObject> it;
+
+            if (loanSearchBarcode.getText().equals("") && borrowerName.equals("")
+                    && null == loanSearchStartDate.getValue() && null == loanSearchEndDate.getValue())  {
+
+                clearTable();
+                resultTable.setPlaceholder(new Label("Please fill in at least one search field"));
             }
-            if(null != loanSearchEndDate.getValue()) {
-                System.out.println("end: " + loanSearchEndDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            else if(!loanSearchBarcode.getText().equals(""))   {
+
+                clearTable();
+                resultTable.setPlaceholder(new Label("Search yielded no result"));
+
+                if(null != loanSearchStartDate.getValue()) {
+                    startDateString = loanSearchStartDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                }
+                if(null != loanSearchEndDate.getValue()) {
+                    endDateString = loanSearchEndDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                }
+
+                it = application.doLoanSearch(Integer.parseInt(loanSearchBarcode.getText()), borrowerName,
+                        startDateString, endDateString, isActive);
+                if (it.hasNext())   {
+                    buildLoanSearchResult(it);
+                }
             }
-            System.out.println(loanSearchActiveLoans.isSelected());
+            else {
+
+                clearTable();
+                resultTable.setPlaceholder(new Label("Search yielded no result"));
+
+                if(null != loanSearchStartDate.getValue()) {
+                    startDateString = loanSearchStartDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                }
+                if(null != loanSearchEndDate.getValue()) {
+                    endDateString = loanSearchEndDate.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                }
+
+                it = application.doLoanSearch(-1, borrowerName,
+                        startDateString, endDateString, isActive);
+                if (it.hasNext())   {
+                    buildLoanSearchResult(it);
+                }
+            }
         });
     }
 
+    private void buildLoanSearchResult(Iterator<JSONObject> it) {
+
+    }
+
     private void setupBorrowerSearch()  {
+
+        borrowerSearchBarcode.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                borrowerSearchBarcode.setText(newValue.replaceAll("[^\\d]", ""));
+            }
+        });
 
         borrowerSearchInitButton.setOnMouseClicked((MouseEvent e) ->    {
             System.out.println("Borrower search initiated");
             System.out.println(borrowerSearchBarcode.getText());
             System.out.println(borrowerSearchBorrowerName.getText());
             System.out.println(borrowerSearchPhone.getText());
+
+            String name = borrowerSearchBorrowerName.getText();
+            String phone = borrowerSearchPhone.getText();
+
+            Iterator<JSONObject> it;
+
+            if(borrowerSearchBarcode.getText().equals("") && name.equals("") && phone.equals(""))   {
+
+                clearTable();
+                resultTable.setPlaceholder(new Label("Please fill in at least one search field"));
+            }
+            else if (!borrowerSearchBarcode.getText().equals(""))   {
+                clearTable();
+                resultTable.setPlaceholder(new Label("Search yielded no result"));
+
+                it = application.doBorrowerSearch(name, phone, Integer.parseInt(borrowerSearchBarcode.getText()));
+                if (it.hasNext())   {
+                    buildBorrowerSearchResult(it);
+                }
+            }
+            else {
+                clearTable();
+                resultTable.setPlaceholder(new Label("Search yielded no result"));
+
+                it = application.doBorrowerSearch(name, phone, -1);
+                if (it.hasNext())   {
+                    buildBorrowerSearchResult(it);
+                }
+            }
         });
+    }
+
+    private void buildBorrowerSearchResult(Iterator<JSONObject> it) {
+        TableColumn<BookSearchResultModel, String> nameCol = new TableColumn<>("Name");
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        TableColumn<BookSearchResultModel, String> phoneCol = new TableColumn<>("Phone");
+        phoneCol.setCellValueFactory(new PropertyValueFactory<>("phone"));
+
+        TableColumn<BookSearchResultModel, String> emailCol = new TableColumn<>("Email");
+        emailCol.setCellValueFactory(new PropertyValueFactory<>("email"));
+
+        resultTable.setEditable(true);
+        resultTable.getColumns().addAll(nameCol, phoneCol, emailCol);
+        resultTable.getItems().setAll(observableBorrowerSearchResultList(it));
+    }
+
+    private ObservableList<BorrowerSearchResultModel> observableBorrowerSearchResultList(Iterator<JSONObject> it)    {
+
+        ObservableList<BorrowerSearchResultModel> observableResults = FXCollections.observableArrayList();
+
+        while (it.hasNext())    {
+            JSONObject jsonObject = it.next();
+            if(!jsonObject.has("email"))   {
+                jsonObject.put("email", "------");
+            }
+
+            observableResults.add(new BorrowerSearchResultModel(jsonObject.get("name").toString(),
+                    jsonObject.get("phone").toString(),
+                    jsonObject.get("email").toString()));
+        }
+
+        return observableResults;
+    }
+
+    private void clearTable()   {
+        resultTable.getColumns().clear();
+        resultTable.getItems().clear();
     }
 
     private void buildDebugMenu()   {
@@ -432,7 +528,6 @@ public class GUIController implements SearchListener {
             debugMenu.getItems().addAll(clearDatabaseButton, rebuildDatabaseButton, fillDatabaseButton);
 
             menuBar.getMenus().add(debugMenu);
-
         }
     }
 
@@ -445,7 +540,6 @@ public class GUIController implements SearchListener {
             Alert logoutAlert = new Alert(Alert.AlertType.CONFIRMATION, "Log out successful", ButtonType.OK);
             logoutAlert.setHeaderText("Success");
             logoutAlert.showAndWait();
-
         }
         else {
             TextInputDialog authDialog = new TextInputDialog();
@@ -455,7 +549,6 @@ public class GUIController implements SearchListener {
             Optional<String> result = authDialog.showAndWait();
             result.ifPresent(password -> application.authorizeAsAdmin(password));
         }
-
     }
 
     private void addBranchDialog()  {
