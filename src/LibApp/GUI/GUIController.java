@@ -229,32 +229,49 @@ public class GUIController implements SearchListener {
             String publisher = bookSearchPublisher.getText();
             String edition = bookSearchEdition.getText();
 
+            Iterator<JSONObject> it;
+
             if(title.equals("") && author.equals("") && publisher.equals("")
                     && edition.equals("") && bookSearchYear.getText().equals("")
                     && (bookSearchBranchDropdown.getSelectionModel().isEmpty()
-                        || bookSearchBranchDropdown.getSelectionModel().getSelectedItem().toString().equals("No branch")))   {
+                    || bookSearchBranchDropdown.getSelectionModel().getSelectedItem().toString().equals("No branch")))   {
 
                 resultTable.getItems().clear();
                 resultTable.setPlaceholder(new Label("Please fill in at least one search field"));
             }
             else if(!bookSearchYear.getText().equals(""))   {
+
                 if(Integer.parseInt(bookSearchYear.getText()) <= (Year.now().getValue())) {
 
-                    Iterator<JSONObject> it = application.doBookSearch(title, author, publisher, edition,
-                                                Integer.parseInt(bookSearchYear.getText()),
-                                                bookSearchBranchDropdown.getSelectionModel().getSelectedItem().toString());
+                    if(bookSearchBranchDropdown.getSelectionModel().isEmpty()
+                            || bookSearchBranchDropdown.getSelectionModel().getSelectedItem().toString().equals("No branch")) {
 
-                    while (it.hasNext()) {
-                        //TODO handle result JSON objects and empty result iterators
+                        it = application.doBookSearch(title, author, publisher, edition,
+                                Integer.parseInt(bookSearchYear.getText()), "");
+
                     }
+                    else {
+
+                        it = application.doBookSearch(title, author, publisher, edition,
+                                Integer.parseInt(bookSearchYear.getText()),
+                                bookSearchBranchDropdown.getSelectionModel().getSelectedItem().toString());
+                    }
+
+
                 }
                 else {
                     resultTable.getItems().clear();
                     resultTable.setPlaceholder(new Label("Please input a year that is not in the future"));
                 }
             }
+            else if(bookSearchBranchDropdown.getSelectionModel().isEmpty()
+                    || bookSearchBranchDropdown.getSelectionModel().getSelectedItem().toString().equals("No branch")) {
+
+                it = application.doBookSearch(title, author, publisher, edition,
+                        -1, "");
+            }
             else {
-                Iterator<JSONObject> it = application.doBookSearch(title, author, publisher, edition,
+                it = application.doBookSearch(title, author, publisher, edition,
                         -1, bookSearchBranchDropdown.getSelectionModel().getSelectedItem().toString());
             }
         });
@@ -364,23 +381,6 @@ public class GUIController implements SearchListener {
         while(branches.hasNext())   {
             bookSearchBranchDropdown.getItems().add(branches.next());
         }
-    }
-
-
-    //TODO when called through the interface, have the table update with the corresponding information
-    @Override
-    public void onBooksSearched() {
-
-    }
-
-    @Override
-    public void onLoansSearched() {
-
-    }
-
-    @Override
-    public void onBorrowersSearched() {
-
     }
 
     @Override
