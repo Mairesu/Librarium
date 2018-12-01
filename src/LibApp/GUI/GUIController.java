@@ -450,8 +450,6 @@ public class GUIController implements SearchListener {
 
         ObservableList<LoanSearchResultModel> observableResults = FXCollections.observableArrayList();
 
-
-        //TODO merge branch name and address
         while (it.hasNext())    {
             JSONObject jsonObject = it.next();
             if(!jsonObject.has("returned"))   {

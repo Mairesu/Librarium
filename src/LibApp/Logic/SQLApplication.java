@@ -15,7 +15,7 @@ public class SQLApplication {
     private boolean debug = false;
     private boolean authorized = false;
 
-    /*THE PASSWORD IS HERE FOR DEMONSTRATION PURPOSES!
+    /* THE PASSWORD IS HERE FOR DEMONSTRATION PURPOSES!
      * NEVER EVER EVER EVER EVER EVER -EVER- STORE PASSWORDS IN PLAIN TEXT.
      * EVER
      * NEVER EVER
@@ -30,6 +30,13 @@ public class SQLApplication {
         this.debug = debug;
         this.connection = connectToDatabase();
     }
+
+
+    // |##################################################|
+    // |                                                  |
+    // |               Class logic methods                |
+    // |                                                  |
+    // |##################################################|
 
     public boolean isDebug()    {
         return this.debug;
@@ -60,6 +67,13 @@ public class SQLApplication {
         return this.authorized;
     }
 
+
+    // |##################################################|
+    // |                                                  |
+    // |               General DB methods                 |
+    // |                                                  |
+    // |##################################################|
+
     public Connection connectToDatabase() {
 
         url = "jdbc:sqlite:libraryDatabase.db";
@@ -77,7 +91,41 @@ public class SQLApplication {
         return connection;
     }
 
+    public void executeSqlStatement(String sqlStatement)    {
 
+        try (Statement statement = connection.createStatement()) {
+
+            statement.execute(sqlStatement);
+        }
+        catch (SQLException e)   {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    public Iterator<String> readSqlFile(String filePath) {
+
+        StringBuilder streamString = new StringBuilder();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String sCurrentLine;
+            while ((sCurrentLine = br.readLine()) != null) {
+                streamString.append(sCurrentLine);
+                streamString.append("\n");
+            }
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+
+        ArrayList<String> sqlStatements = new ArrayList<>(Arrays.asList(streamString.toString().split(";")));
+
+        return sqlStatements.iterator();
+    }
+
+    // |##################################################|
+    // |                                                  |
+    // |         Methods and queries for search           |
+    // |                                                  |
+    // |##################################################|
 
     public Iterator<String> getAllBranches()    {
 
@@ -254,16 +302,12 @@ public class SQLApplication {
         return searchResults.iterator();
     }
 
-    public void executeSqlStatement(String sqlStatement)    {
 
-        try (Statement statement = connection.createStatement()) {
-
-            statement.execute(sqlStatement);
-        }
-        catch (SQLException e)   {
-            System.err.println(e.getMessage());
-        }
-    }
+    // |##################################################|
+    // |                                                  |
+    // |                  Debug methods                   |
+    // |                                                  |
+    // |##################################################|
 
     public void debugClearDatabase() {
         if(debug)   {
@@ -305,24 +349,5 @@ public class SQLApplication {
                 s.onDebugAlert("Database filled with dummy data");
             }
         }
-    }
-
-    public Iterator<String> readSqlFile(String filePath)   {
-
-        StringBuilder streamString = new StringBuilder();
-
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath)))  {
-            String sCurrentLine;
-            while ((sCurrentLine = br.readLine()) != null) {
-                streamString.append(sCurrentLine);
-                streamString.append("\n");
-            }
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-        }
-
-        ArrayList<String> sqlStatements = new ArrayList<>(Arrays.asList(streamString.toString().split(";")));
-
-        return sqlStatements.iterator();
     }
 }
