@@ -96,7 +96,8 @@ public class SQLApplication {
                  strings.add(resultSet.getString("branch_name") + ", " +
                          resultSet.getString("street_address"));
             }
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 
@@ -140,7 +141,7 @@ public class SQLApplication {
         }
 
         if(0 <= year)   {
-            sqlQuery += "AND b.publication_year = " + year;
+            sqlQuery += "AND b.publication_year = " + year + " ";
         }
 
         try(PreparedStatement prepStatement = connection.prepareStatement(sqlQuery)) {
@@ -165,34 +166,76 @@ public class SQLApplication {
         return searchResults.iterator();
     }
 
-    //TODO write loan and borrower search queries
-
     public Iterator<JSONObject> doLoanSearch(int barcode, String borrowerName, String startDateString,
                                              String endDateString, boolean isActive)    {
 
         ArrayList<JSONObject> searchResults = new ArrayList<>();
 
+        //TODO Make the query use parameters.
+        //TODO Also make it ignore barcode input if barcode = -1
+
+        String sqlQuery = "SELECT DISTINCT b.book_title, br.barcode_number, bw.borrower_name, " +
+                "l.start_date, l.end_date, l.returned_date, lb.branch_name, ad.street_address " +
+                "FROM loan l, barcode br, borrower bw, book b, library_branch lb, address ad " +
+                "WHERE bw.borrower_id = l.borrower_id " +
+                "AND l.barcode_number = br.barcode_number " +
+                "AND br.book_id = b.book_id " +
+                "AND lb.branch_id = l.library_branch_id " +
+                "AND lb.branch_address_id = ad.address_id " +
+                "AND bw.borrower_name LIKE '%" + borrowerName + "%' ";
+
+        if(0 <= barcode)    {
+            sqlQuery += "AND l.barcode_number = " + barcode + " ";
+        }
+        else {
+            sqlQuery += "AND l.barcode_number > 0 ";
+        }
+        if(isActive)    {
+            sqlQuery += "AND l.returned_date IS NULL ";
+        }
+        if(!(startDateString.equals("")))   {
+            sqlQuery += "AND l.start_date = '" + startDateString + "' ";
+        }
+        if(!(endDateString.equals(""))) {
+            sqlQuery += "AND l.end_date = '" + endDateString + "' ";
+        }
+
+        try(PreparedStatement prepStatement = connection.prepareStatement(sqlQuery))    {
+
+            ResultSet resultSet = prepStatement.executeQuery();
+
+            while(resultSet.next()) {
+                searchResults.add(new JSONObject().put("title", resultSet.getString("book_title"))
+                        .put("barcode", resultSet.getInt("barcode_number"))
+                        .put("borrower", resultSet.getString("borrower_name"))
+                        .put("start", resultSet.getString("start_date"))
+                        .put("end", resultSet.getString("end_date"))
+                        .put("returned", resultSet.getString("returned_date"))
+                        .put("branch", resultSet.getString("branch_name"))
+                        .put("address", resultSet.getString("street_address")));
+            }
+        }
+        catch (SQLException e)  {
+            System.out.println(e.getMessage());
+        }
 
         return searchResults.iterator();
     }
 
-    //TODO make so the query also adds people who have not borrowed books when NOT searching through barcode
-    //TODO basically check if barcode is "" and then only add it if barcode is not ""
     public Iterator<JSONObject> doBorrowerSearch(String name, String phone, int barcode)    {
 
         ArrayList<JSONObject> searchResults = new ArrayList<>();
 
-        String sqlBase = "SELECT DISTINCT bw.borrower_name, bw.borrower_phone, bw.borrower_email " +
+        String sqlQuery = "SELECT DISTINCT bw.borrower_name, bw.borrower_phone, bw.borrower_email " +
                 "FROM borrower bw, loan l, barcode br " +
-                "WHERE bw.borrower_id = l.borrower_id " +
-                "AND l.barcode_number = br.barcode_number " +
-                "AND bw.borrower_name LIKE '%" + name + "%' " +
+                "WHERE bw.borrower_name LIKE '%" + name + "%' " +
                 "AND bw.borrower_phone LIKE '%" + phone + "%' ";
 
-        String sqlQuery = sqlBase;
-
         if(0 <= barcode )   {
-            sqlQuery += "AND br.barcode_number = " + barcode;
+
+            sqlQuery += "AND bw.borrower_id = l.borrower_id " +
+                    "AND l.barcode_number = br.barcode_number " +
+                    "AND br.barcode_number = " + barcode + " ";
         }
 
         try(PreparedStatement prepStatement = connection.prepareStatement(sqlQuery)) {

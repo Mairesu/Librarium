@@ -2,6 +2,7 @@ package LibApp.GUI;
 
 import LibApp.Data.BookSearchResultModel;
 import LibApp.Data.BorrowerSearchResultModel;
+import LibApp.Data.LoanSearchResultModel;
 import LibApp.Interface.SearchListener;
 import LibApp.Logic.SQLApplication;
 import javafx.collections.FXCollections;
@@ -419,6 +420,55 @@ public class GUIController implements SearchListener {
 
     private void buildLoanSearchResult(Iterator<JSONObject> it) {
 
+        TableColumn<BookSearchResultModel, String> titleCol = new TableColumn<>("Book Title");
+        titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
+
+        TableColumn<BookSearchResultModel, String> barcodeCol = new TableColumn<>("Barcode");
+        barcodeCol.setCellValueFactory(new PropertyValueFactory<>("barcode"));
+
+        TableColumn<BookSearchResultModel, String> borrowerCol = new TableColumn<>("Borrower");
+        borrowerCol.setCellValueFactory(new PropertyValueFactory<>("borrower"));
+
+        TableColumn<BookSearchResultModel, String> startCol = new TableColumn<>("Start Date");
+        startCol.setCellValueFactory(new PropertyValueFactory<>("start"));
+
+        TableColumn<BookSearchResultModel, String> endCol = new TableColumn<>("End Date");
+        endCol.setCellValueFactory(new PropertyValueFactory<>("end"));
+
+        TableColumn<BookSearchResultModel, String> returnedCol = new TableColumn<>("Returned Date");
+        returnedCol.setCellValueFactory(new PropertyValueFactory<>("returned"));
+
+        TableColumn<BookSearchResultModel, String> branchCol = new TableColumn<>("Library Branch");
+        branchCol.setCellValueFactory(new PropertyValueFactory<>("branch"));
+
+        resultTable.setEditable(true);
+        resultTable.getColumns().addAll(titleCol, barcodeCol, borrowerCol, startCol, endCol, returnedCol, branchCol);
+        resultTable.getItems().setAll(observableLoanSearchResultList(it));
+    }
+
+    private ObservableList<LoanSearchResultModel> observableLoanSearchResultList(Iterator<JSONObject> it)    {
+
+        ObservableList<LoanSearchResultModel> observableResults = FXCollections.observableArrayList();
+
+
+        //TODO merge branch name and address
+        while (it.hasNext())    {
+            JSONObject jsonObject = it.next();
+            if(!jsonObject.has("returned"))   {
+                jsonObject.put("returned", "------");
+            }
+
+            observableResults.add(new LoanSearchResultModel(jsonObject.get("title").toString(),
+                    jsonObject.get("barcode").toString(),
+                    jsonObject.get("borrower").toString(),
+                    jsonObject.get("start").toString(),
+                    jsonObject.get("end").toString(),
+                    jsonObject.get("returned").toString(),
+                    jsonObject.get("branch").toString() + ", " +
+                    jsonObject.get("address").toString()));
+        }
+
+        return observableResults;
     }
 
     private void setupBorrowerSearch()  {
